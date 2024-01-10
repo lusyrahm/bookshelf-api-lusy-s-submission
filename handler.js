@@ -129,14 +129,14 @@ const getBookDetailHandler = (request, h) => {
   const book = books.filter((b) => b.id === bookId)[0];
 
 if (book !== undefined) {
-  const response = h.response ({
+  const response = h.response({
     status: 'success',
     data: {
       book: book,
     },
   });
 
-response.code(202);
+response.code(200);
 return response;
 };
 
@@ -151,7 +151,7 @@ return response;
 
 /* API can edit book data */
 const editBookByIdHandler = (request, h) => {
-  const {bookId } = request.params;
+  const { bookId } = request.params;
 
   const {
     name,
@@ -165,29 +165,29 @@ const editBookByIdHandler = (request, h) => {
   } = request.payload;
   const updatedAt = new Date().toISOString();
 
-  const index = books.findIndex((book) => book.id === bookId);
+  const bookIndex = books.findIndex((book) => book.id === bookId);
 
-if (index !== -1) {
+if (bookIndex !== -1) {
   if (!name) {
     const response = h.response({
       status: 'fail',
       message: 'Gagal memperbarui buku. Mohon isi nama buku',
     });
 
-    response.code(404);
+    response.code(400);
     return response;
-} else if (readPage > pageCount) {
-  const response = h.response({
-    status: 'fail',
-    message: 'Gagal memperbarui buku. readPage tidak boleh lebih besar dari pageCount',
+  } else if (readPage > pageCount) {
+    const response = h.response({
+      status: 'fail',
+      message: 'Gagal memperbarui buku. readPage tidak boleh lebih besar dari pageCount',
     });
 
     response.code(400);
     return response;
   }
 
-  books[index] = {
-    ...books[index],
+  books[bookIndex] = {
+    ...books[bookIndex],
     name,
     year,
     author,
